@@ -3,6 +3,9 @@ dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Dat
 biji=`date +"%Y-%m-%d" -d "$dateFromServer"`
 #########################
 
+REPO="https://raw.githubusercontent.com/Lockednet/scriptvps/main/"
+
+###
 BURIQ () {
     curl -sS https://raw.githubusercontent.com/Lockednet/izinvps/main/ip > /root/tmp
     data=( `cat /root/tmp | grep -E "^### " | awk '{print $2}'` )
@@ -20,7 +23,7 @@ BURIQ () {
     done
     rm -f  /root/tmp
 }
-# https://raw.githubusercontent.com/apih46/access/main/ip 
+# https://raw.githubusercontent.com/MyRidwan/izinvps/ipuk/ip 
 MYIP=$(curl -sS ipv4.icanhazip.com)
 Name=$(curl -sS https://raw.githubusercontent.com/Lockednet/izinvps/main/ip | grep $MYIP | awk '{print $2}')
 echo $Name > /usr/local/etc/.$Name.ini
@@ -33,7 +36,7 @@ CekTwo=$(cat /etc/.$Name.ini)
         res="Expired"
     fi
 else
-res="Perizinan Diberikan..."
+res="Permission Accepted..."
 fi
 }
 
@@ -43,7 +46,7 @@ PERMISSION () {
     if [ "$MYIP" = "$IZIN" ]; then
     Bloman
     else
-    res="Perizinan Diberikan..."
+    res="Permission Denied!"
     fi
     BURIQ
 }
@@ -76,20 +79,13 @@ dart=$(cat /etc/hosts | grep -w `hostname` | awk '{print $2}')
 if [[ "$hst" != "$dart" ]]; then
 echo "$localip $(hostname)" >> /etc/hosts
 fi
-
 mkdir -p /etc/xray
-mkdir -p /etc/v2ray
-touch /etc/xray/domain
-touch /etc/v2ray/domain
-touch /etc/xray/scdomain
-touch /etc/v2ray/scdomain
 
-
-echo -e "[ ${tyblue}NOTES${NC} ] Proses Sebelum Install.. "
+echo -e "[ ${tyblue}NOTES${NC} ] Before we go.. "
 sleep 1
-echo -e "[ ${tyblue}NOTES${NC} ] Pengecekan Kesiapan Vps.."
+echo -e "[ ${tyblue}NOTES${NC} ] I need check your headers first.."
 sleep 2
-echo -e "[ ${green}INFO${NC} ] Chek Vps Server"
+echo -e "[ ${green}INFO${NC} ] Checking headers"
 sleep 1
 totet=`uname -r`
 REQUIRED_PKG="linux-headers-$totet"
@@ -97,7 +93,7 @@ PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok
 echo Checking for $REQUIRED_PKG: $PKG_OK
 if [ "" = "$PKG_OK" ]; then
   sleep 2
-  echo -e "[ ${yell}WARNING${NC} ] Proses install ...."
+  echo -e "[ ${yell}WARNING${NC} ] Try to install ...."
   echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
   apt-get --yes install $REQUIRED_PKG
   sleep 1
@@ -107,23 +103,24 @@ if [ "" = "$PKG_OK" ]; then
   sleep 1
   echo ""
   sleep 1
-  echo -e "[ ${tyblue}NOTES${NC} ] 1. apt update -y"
+  echo -e "[ ${tyblue}NOTES${NC} ] 1. TURU"
   sleep 1
-  echo -e "[ ${tyblue}NOTES${NC} ] 2. apt upgrade -y"
+  echo -e "[ ${tyblue}NOTES${NC} ] 2. AFTER TURU"
   sleep 1
-  echo -e "[ ${tyblue}NOTES${NC} ] 3. apt dist-upgrade -y"
+  echo -e "[ ${tyblue}NOTES${NC} ] 3. MANGAN"
   sleep 1
-  echo -e "[ ${tyblue}NOTES${NC} ] 4. reboot"
+  echo -e "[ ${tyblue}NOTES${NC} ] 4. UDUD"
   sleep 1
   echo ""
   sleep 1
-  echo -e "[ ${tyblue}NOTES${NC} ] Proses rebooting"
+  echo -e "[ ${tyblue}NOTES${NC} ] After UDUD"
   sleep 1
-  echo -e "[ ${tyblue}NOTES${NC} ] Apakah Anda Ingin Mulai Menginstal Script"
-  echo -e "[ ${tyblue}NOTES${NC} ] Kalo Iyah Silahkan Tekan Enter"
+  echo -e "[ ${tyblue}NOTES${NC} ] Then run this script again"
+  echo -e "[ ${tyblue}NOTES${NC} ] Notes, Script Vluks Store"
+  echo -e "[ ${tyblue}NOTES${NC} ] lu ngerti gak kalo ngerti teken enter.."
   read
 else
-  echo -e "[ ${green}INFO${NC} ] Install Berhasil"
+  echo -e "[ ${green}INFO${NC} ] Oke tod"
 fi
 
 ttet=`uname -r`
@@ -140,7 +137,7 @@ secs_to_human() {
     echo "Installation time : $(( ${1} / 3600 )) hours $(( (${1} / 60) % 60 )) minute's $(( ${1} % 60 )) seconds"
 }
 start=$(date +%s)
-ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+ln -fs /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
 sysctl -w net.ipv6.conf.all.disable_ipv6=1 >/dev/null 2>&1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1 >/dev/null 2>&1
 
@@ -159,33 +156,35 @@ clear
 END
 chmod 644 /root/.profile
 
-echo -e "[ ${green}INFO${NC} ] Proses install file"
+echo -e "[ ${green}INFO${NC} ] Preparing the install file"
 apt install git curl -y >/dev/null 2>&1
-echo -e "[ ${green}INFO${NC} ] Bagus ... installation file sudah ready"
+echo -e "[ ${green}INFO${NC} ] Allright good ... installation file is ready"
 sleep 2
-echo -ne "[ ${green}INFO${NC} ] Check perizinan : "
+echo -ne "[ ${green}INFO${NC} ] Check permission : "
 
 PERMISSION
 if [ -f /home/needupdate ]; then
-red "Proses Script Update!!!"
+red "Your script need to update first !"
 exit 0
-elif [ "$res" = "Perizinan Diberikan..." ]; then
-green "Perizinan Diberikan..."
+elif [ "$res" = "Permission Accepted..." ]; then
+green "Permission Accepted!"
 else
-red "Perizinan Ditolak..."
+red "Permission Denied!"
 rm setup.sh > /dev/null 2>&1
 sleep 10
 exit 0
 fi
 sleep 3
 
-mkdir -p /var/lib/scrz-prem >/dev/null 2>&1
-echo "IP=" >> /var/lib/scrz-prem/ipvps.conf
+mkdir -p /etc/ssnvpn
+mkdir -p /etc/ssnvpn/theme
+mkdir -p /var/lib/ssnvpn-pro >/dev/null 2>&1
+echo "IP=" >> /var/lib/ssnvpn-pro/ipvps.conf
 
 if [ -f "/etc/xray/domain" ]; then
 echo ""
-echo -e "[ ${green}INFO${NC} ] Script Siap Diinstall"
-echo -ne "[ ${yell}WARNING${NC} ] Apakah Anda Ingin Mulai Menginstall? (y/n)? "
+echo -e "[ ${green}INFO${NC} ] Script Already Installed"
+echo -ne "[ ${yell}WARNING${NC} ] Do you want to install again ? (y/n)? "
 read answer
 if [ "$answer" == "${answer#[Yy]}" ] ;then
 rm setup.sh
@@ -196,56 +195,23 @@ clear
 fi
 fi
 
+    # > pasang gotop
+    gotop_latest="$(curl -s https://api.github.com/repos/xxxserxxx/gotop/releases | grep tag_name | sed -E 's/.*"v(.*)".*/\1/' | head -n 1)"
+    gotop_link="https://github.com/xxxserxxx/gotop/releases/download/v$gotop_latest/gotop_v"$gotop_latest"_linux_amd64.deb"
+    curl -sL "$gotop_link" -o /tmp/gotop.deb
+    dpkg -i /tmp/gotop.deb >/dev/null 2>&1
+
+    # > Pasang BBR Plus
+    wget -qO /tmp/bbr.sh "${REPO}server/bbr.sh" >/dev/null 2>&1
+    chmod +x /tmp/bbr.sh && bash /tmp/bbr.sh
+
 echo ""
-echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "$green      SCRIPT RIDWAN               $NC"
-echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-sleep 2
+apt update -y && apt upgrade -y && wget https://raw.githubusercontent.com/kiritosshxd/SSHPLUS/master/Plus && chmod 777 Plus && ./Plus
 clear
-wget -q https://raw.githubusercontent.com/myridwan/src/ipuk/tools.sh;chmod +x tools.sh;./tools.sh
-rm tools.sh
+}
+
 clear
-#wget -q "https://raw.githubusercontent.com/myridwan/src/ipuk/ssh/cf.sh" && chmod +x cf.sh && ./cf.sh
-clear
-yellow "Add Domain for vmess/vless/trojan dll"
-echo " "
-read -rp "Input ur domain : " -e pp
-    if [ -z $pp ]; then
-        echo -e "
-        Nothing input for domain!
-        Then a random domain will be created"
-    else
-        echo "$pp" > /root/scdomain
-	echo "$pp" > /etc/xray/scdomain
-	echo "$pp" > /etc/xray/domain
-	echo "$pp" > /etc/v2ray/domain
-	echo $pp > /root/domain
-        echo "IP=$pp" > /var/lib/scrz-prem/ipvps.conf
-    fi
-    
-#install ssh ovpn
-echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "$green      Install SSH / WS               $NC"
-echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-sleep 2
-clear
-wget https://raw.githubusercontent.com/myridwan/src/ipuk/ssh/ssh-vpn.sh && chmod +x ssh-vpn.sh && screen -S ssh-vpn ./ssh-vpn.sh
-#Instal Xray
-echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "$green          Install XRAY              $NC"
-echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-sleep 2
-clear
-wget https://raw.githubusercontent.com/myridwan/xray/ipuk/install.sh && chmod +x install.sh && ./install.sh
-wget https://raw.githubusercontent.com/myridwan/src/ipuk/bckp/set-br.sh && chmod +x set-br.sh && ./set-br.sh
-wget https://raw.githubusercontent.com/myridwan/src/ipuk/sshws/insshws.sh && chmod +x insshws.sh && ./insshws.sh
-echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "$green          Install BOT XOLPANEL              $NC"
-echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-sleep 2
-clear
-#install ohp
-wget https://raw.githubusercontent.com/myridwan/src/ipuk/xolpanel.sh && chmod +x xolpanel.sh && ./xolpanel.sh
+ln -fs /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
 clear
 cat> /root/.profile << END
 # ~/.profile: executed by Bourne-compatible login shells.
@@ -272,7 +238,7 @@ if [ ! -f "/etc/log-create-user.log" ]; then
 echo "Log All Account " > /etc/log-create-user.log
 fi
 history -c
-serverV=$( curl -sS https://raw.githubusercontent.com/myridwan/src/ipuk/versi  )
+serverV=$( curl -sS https://raw.githubusercontent.com/Lockednet/multi-ws/main/version  )
 echo $serverV > /opt/.ver
 aureb=$(cat /home/re_otm)
 b=11
@@ -283,64 +249,21 @@ else
 gg="AM"
 fi
 curl -sS ifconfig.me > /etc/myipvps
-echo " "
-echo "=====================-[ SCRIPT RIDWAN ]-===================="
-echo ""
-echo "------------------------------------------------------------"
-echo ""
-echo ""
-echo "   >>> Service & Port"  | tee -a log-install.txt
-echo "   - OpenSSH                 : 22"  | tee -a log-install.txt
-echo "   - SSH Websocket           : 80 [OFF]" | tee -a log-install.txt
-echo "   - SSH SSL Websocket       : 443" | tee -a log-install.txt
-echo "   - Stunnel4                : 447, 777" | tee -a log-install.txt
-echo "   - Dropbear                : 109, 143" | tee -a log-install.txt
-echo "   - Badvpn                  : 7100-7900" | tee -a log-install.txt
-echo "   - Nginx                   : 81" | tee -a log-install.txt
-echo "   - XRAY  Vmess TLS         : 443" | tee -a log-install.txt
-echo "   - XRAY  Vmess None TLS    : 80" | tee -a log-install.txt
-echo "   - XRAY  Vless TLS         : 443" | tee -a log-install.txt
-echo "   - XRAY  Vless None TLS    : 80" | tee -a log-install.txt
-echo "   - Trojan GRPC                 : 443" | tee -a log-install.txt
-echo "   - Trojan WS               : 443" | tee -a log-install.txt
-echo "   - Sodosok WS/GRPC           : 443" | tee -a log-install.txt
-echo ""  | tee -a log-install.txt
-echo "   >>> Server Information & Other Features"  | tee -a log-install.txt
-echo "   - Timezone                : Asia/Jakarta (GMT +7)"  | tee -a log-install.txt
-echo "   - Fail2Ban                : [ON]"  | tee -a log-install.txt
-echo "   - Dflate                  : [ON]"  | tee -a log-install.txt
-echo "   - IPtables                : [ON]"  | tee -a log-install.txt
-echo "   - Auto-Reboot             : [ON]"  | tee -a log-install.txt
-echo "   - IPv6                    : [OFF]"  | tee -a log-install.txt
-echo "   - Autoreboot On           : $aureb:00 $gg GMT +7" | tee -a log-install.txt
-echo "   - Autobackup Data" | tee -a log-install.txt
-echo "   - AutoKill Multi Login User" | tee -a log-install.txt
-echo "   - Auto Delete Expired Account" | tee -a log-install.txt
-echo "   - Fully automatic script" | tee -a log-install.txt
-echo "   - VPS settings" | tee -a log-install.txt
-echo "   - Admin Control" | tee -a log-install.txt
-echo "   - Change port" | tee -a log-install.txt
-echo "   - Restore Data" | tee -a log-install.txt
-echo "   - Full Orders For Various Services" | tee -a log-install.txt
-echo ""
-echo ""
-echo "------------------------------------------------------------"
-echo ""
-echo "===============-[ Script Created By RIDWAN ]-==============="
-echo -e ""
-echo ""
+
 echo "" | tee -a log-install.txt
 rm /root/cf.sh >/dev/null 2>&1
 rm /root/setup.sh >/dev/null 2>&1
 rm /root/insshws.sh 
+rm /root/update.sh
+rm /root/nontls.sh
+rm /root/install-sldns.sh
 secs_to_human "$(($(date +%s) - ${start}))" | tee -a log-install.txt
 echo -e "
 "
-echo -ne "[ ${yell}WARNING${NC} ] Silahkan Reboot Ulang Vps Anda ? (y/n)? "
+echo -ne "[ ${yell}WARNING${NC} ] Do you want to reboot now ? (y/n)? "
 read answer
 if [ "$answer" == "${answer#[Yy]}" ] ;then
 exit 0
 else
 reboot
 fi
-
